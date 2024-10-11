@@ -1,0 +1,27 @@
+{% extends "ecoWanderApp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+ <div class="container-fluid mt-5">
+  <div class="row g-3">
+    {% for tour in tours %}
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+      <div class="card h-100" style="width: 18rem;">
+        <img src="{{ tour.images.url}}"  class="card-img-top" alt="..." style="height: 200px; object-fit: cover;">
+        <div class="card-body">
+          <h5 class="card-title">{{tour.name}}</h5>
+          <p class="card-text">Precio: {{tour.price}}</p>
+          <p class="card-text">Ubicación: {{tour.municipality}}-{{tour.deparment}}</p>
+          <a href="{% url 'Tour_detail' tour.id %}"  class="btn btn-primary">Mostrar Detalles</a>
+        </div>
+       </div>
+    </div>
+    {% endfor %}
+  
+  </div>
+</div> 
+ 
+{% endblock %}
