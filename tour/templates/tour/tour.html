@@ -3,25 +3,74 @@
 {% load static %}
 
 {% block content %}
+ 
+<div class="container-fluid mt-5">
+    <div class="row g-3">
 
+        <div class="col-md-2">
+            <h1>Buscar Tours</h1>
+            <form id="busqueda-tours-form" method="get">
+              {% csrf_token %}
 
- <div class="container-fluid mt-5">
-  <div class="row g-3">
-    {% for tour in tours %}
-    <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-      <div class="card h-100" style="width: 18rem;">
-        <img src="{{ tour.images.url}}"  class="card-img-top" alt="..." style="height: 200px; object-fit: cover;">
-        <div class="card-body">
-          <h5 class="card-title">{{tour.name}}</h5>
-          <p class="card-text">Precio: {{tour.price}} $</p>
-          <p class="card-text">Ubicación: {{tour.municipality}}-{{tour.deparment}}</p>
-          <a href="{% url 'Tour_detail' tour.id %}"  class="btn btn-primary">Mostrar Detalles</a>
+              <div class="form-group">
+                <label for="{{ form.category.id_for_label }}">Categoría</label>
+                {{ form.category }}
+              </div>
+
+              <div class="form-group">
+                <label for="{{ form.deparment.id_for_label }}">Departamento</label>
+                {{ form.deparment }}
+              </div>
+
+              <div class="form-group">
+                <label for="{{ form.municipality.id_for_label }}">Municipio</label>
+                {{ form.municipality }}
+              </div>
+
+              <div class="form-group">
+                <label for="{{ form.price_min.id_for_label }}">Precio Mínimo</label>
+                {{ form.price_min }}
+              </div>
+
+              <div class="form-group">
+                <label for="{{ form.price_max.id_for_label }}">Precio Máximo</label>
+                {{ form.price_max }}
+              </div>
+
+              
+
+            </form>
+          </div>
+
+          <script>
+            // Función para enviar automáticamente el formulario al cambiar una opción
+            $(document).ready(function() {
+              $('#busqueda-tours-form select, #busqueda-tours-form input').on('change', function() {
+                $('#busqueda-tours-form').submit();
+              });
+            });
+          </script>
+
+      <div class="col-md-10"> <div class="row g-3">
+          {% for tour in tours %}
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+              <div class="card h-100" style="width: 18rem;">
+                <img src="{{ tour.images.url}}" class="card-img-top" alt="..." style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                  <h5 class="card-title">{{ tour.name }}</h5>
+                  <p class="card-text">Precio: {{ tour.price }}</p>
+                  <p class="card-text">Ubicación: {{ tour.municipality}}-{{tour.deparment}}</p>
+                  <a href="{% url 'Tour_detail' tour.id %}" class="btn btn-primary">Mostrar Detalles</a>
+                </div>
+              </div>
+            </div>
+          {% empty %}
+            <li>No se encontraron tours que coincidan con los criterios de búsqueda.</li>
+          {% endfor %}
         </div>
-       </div>
+      </div>
     </div>
-    {% endfor %}
-  
   </div>
-</div> 
+
  
 {% endblock %}
