@@ -13,7 +13,7 @@
         <img src="{{ tour.images.url}}"  class="card-img-top" alt="..." style="height: 200px; object-fit: cover;">
         <div class="card-body">
           <h5 class="card-title">{{tour.name}}</h5>
-          <p class="card-text">Precio: {{tour.price}}</p>
+          <p class="card-text">Precio: {{tour.price}} $</p>
           <p class="card-text">Ubicación: {{tour.municipality}}-{{tour.deparment}}</p>
           <a href="{% url 'Tour_detail' tour.id %}"  class="btn btn-primary">Mostrar Detalles</a>
         </div>

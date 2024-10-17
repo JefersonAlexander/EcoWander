@@ -10,7 +10,7 @@
     <h2>¡Crea tu cuenta!</h2>
     <p>Sé parte de la familia de ecoWander y vuélvete un cliente de destino.</p>
    
-   <form class="row g-3" method="post" action="">
+   <form class="row g-3" method="post"  autocomplete="off">
        {% csrf_token %} 
        
  
@@ -65,7 +65,7 @@
        </div>
 
        <div class="col-md-4">
-           <label class="form-label" for="id_phone">Teléfono</label>
+           <label  autocomplete="off" class="form-label" for="id_phone">Teléfono</label>
            {{ form.phone }}
            {% if form.phone.errors %}
            <div class="text-danger">

@@ -13,7 +13,7 @@
                 <img src="{{tour.images.url}}" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">{{tour.name}}</h5>
-                    <p class="card-text">{{tour.description}}</p>
+                    <p class="card-text">{{tour.description|linebreaks}}</p>
                     <p class="card-text">Ubicación: {{tour.municipality}}-{{tour.deparment}}</p>
                     <p class="card-text">Categorias:</p>
                     {% for categoria in tour.categories.all %}

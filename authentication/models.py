@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.models import BaseUserManager
 
+
 class UserProfileManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -33,10 +34,11 @@ class UserProfile(AbstractUser):
     ]
     
     
-    email = models.EmailField(unique=True, null=False)       
+    email = models.EmailField(unique=True, null=False) 
+    username = None     
     type_document = models.CharField(max_length=2, choices=USER_TYPE_CHOICES)
     number_document = models.CharField(max_length=20, unique=True)
-    phone = models.CharField(max_length=15, blank=True, null=True)
+    phone = models.CharField(max_length=15)
 
     USERNAME_FIELD = 'email'  
     REQUIRED_FIELDS = []  

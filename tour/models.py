@@ -35,15 +35,18 @@ class TourCategory(models.Model):
         return self.name
     
 class AvailableDate(models.Model):
-    date = models.DateField()
+    date = models.DateField(unique=True)
 
     class Meta:
         verbose_name="availableDate"
         verbose_name_plural="availableDates"
+    
+    def __str__(self):
+        return self.date.strftime('%Y-%m-%d')
 
 class Tour(models.Model):
     name=models.CharField(max_length=50)
-    description=models.CharField(max_length=300)
+    description=models.TextField()
     municipality=models.ForeignKey(Municipality, on_delete=models.CASCADE)
     deparment=models.ForeignKey(Deparment, on_delete=models.CASCADE)
     categories=models.ManyToManyField(TourCategory) 

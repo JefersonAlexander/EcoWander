@@ -6,6 +6,9 @@ from django.core.exceptions import ValidationError
 class RegistroForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30, required=True, label="Nombre")
     last_name = forms.CharField(max_length=30, required=True, label="Apellido")
+    type_document = forms.ChoiceField(choices=UserProfile.USER_TYPE_CHOICES, required=True, label="Tipo de documento")
+    number_document = forms.CharField(max_length=20, required=True, label="Número de documento")
+    phone = forms.CharField(required=True, label="Teléfono", widget=forms.TextInput(attrs={'autocomplete': 'off'}))
     password = forms.CharField(widget=forms.PasswordInput, label="Contraseña")
     password_confirm = forms.CharField(widget=forms.PasswordInput, label="Confirmarscontraseña")
 
