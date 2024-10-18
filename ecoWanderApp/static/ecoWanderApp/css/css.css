@@ -65,3 +65,40 @@ footer > p {
     margin-bottom: 5px; /* Espacio entre el label y el input */
   }
 
+  
+  
+
+  /* carousel*/
+
+  .carousel-inner {
+    max-height: 25rem;
+  }
+
+  .carousel-item img {
+    object-fit: cover; 
+    height: 100%; 
+    width: 100%; 
+  }
+
+  @media (max-width: 768px){
+    #intro, #equipo{
+        width: 90% !important;
+
+    }
+
+    #equio{
+        display: none;
+    }
+
+    .servicio-fila {
+        width: 100% !important;
+        text-align: center;
+    }
+  }
+
+  @media(max-width:576px){
+    .icono-wrap{
+        flex-wrap: wrap;
+        justify-content: center !important;
+    }
+  }
