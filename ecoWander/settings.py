@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'authentication',
     'ecoWanderApp',
      'tour',
+     'booking',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +55,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ecoWander.urls'
+
+LOGIN_URL = 'log_in'
 
 TEMPLATES = [
     {

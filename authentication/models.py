@@ -38,7 +38,7 @@ class UserProfile(AbstractUser):
     username = None     
     type_document = models.CharField(max_length=2, choices=USER_TYPE_CHOICES)
     number_document = models.CharField(max_length=20, unique=True)
-    phone = models.CharField(max_length=15)
+    phone = models.CharField(max_length=15, null=True, blank=True)
 
     USERNAME_FIELD = 'email'  
     REQUIRED_FIELDS = []  

@@ -6,23 +6,171 @@
 {% block content %}
 
 
-  <div class="container-fluid mt-5">
-    <div >
-        <div class="col-md-6">
-            <div class="card mb-3">
-                <img src="{{tour.images.url}}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">{{tour.name}}</h5>
-                    <p class="card-text">{{tour.description|linebreaks}}</p>
-                    <p class="card-text">Ubicación: {{tour.municipality}}-{{tour.deparment}}</p>
-                    <p class="card-text">Categorias:</p>
-                    {% for categoria in tour.categories.all %}
-                     <a>{{ categoria.name }}</a>
-                     {% endfor %}
-                    <p class="card-text">Precio: {{tour.price}}</p>
-                </div>
-            </div>
+<div class="container-fluid">
+    <div class="row w-75 mx-auto my-5 servicio-fila">
+        <!-- Card del tour a la izquierda -->
+        <div class="col-lg-6 col-md-12 col-sm-12 d-flex my-5 icono-wrap">
+          <div class="card mb-3 w-100">
+              <img src="{{tour.images.url}}" class="card-img-top" alt="...">
+              <div class="card-body">
+                  <h5 class="card-title">{{tour.name}}</h5>
+                  <p class="card-text">{{tour.description|linebreaks}}</p>
+                  <p class="card-text">Ubicación: {{tour.municipality}} - {{tour.deparment}}</p>
+                  <p class="card-text">Categorías:</p>
+                  {% for categoria in tour.categories.all %}
+                      <a>{{ categoria.name }}</a>
+                  {% endfor %}
+              </div>
+          </div>
+        </div>
+  
+        <!-- Formulario de reserva a la derecha con altura reducida -->
+        <div class="col-lg-6 col-md-12 col-sm-12 shadow-sm border my-5 icono-wrap" style="max-height: 350px; overflow-y: auto;">
+          <div class="d-flex flex-column text-center mb-3">
+              <span class="fw-bold fs-4 text-primary">$ {{tour.price}} COP <small class="text-muted">por Persona</small></span>
+          </div>
+  
+          <div class="mb-3">
+              <label for="available-date" class="form-label">Selecciona una fecha:</label>
+              <input type="text" id="available-date" placeholder="Seleccione una fecha disponible" class="form-control" required>
+              {% csrf_token %}
+              <input type="hidden" name="date" id="selected-date"  required>
+          </div>
+  
+          <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center border p-2 rounded">
+                  <span>Cantidad de personas</span>
+                  <div class="d-flex align-items-center">
+                      <input type="number" id="adultCount" value="1" class="form-control text-center mx-2" readonly min="1">
+                      <button class="btn btn-outline-secondary" type="button" onclick="updateGuestCount('adult', -1)">-</button>
+                      <button class="btn btn-outline-secondary" type="button" onclick="updateGuestCount('adult', 1)">+</button>
+                  </div>
+              </div>
+          </div>
+  
+          <!-- Campos ocultos para enviar al backend -->
+          <input type="hidden" name="tour_id" value="{{ tour.id }}">
+          <input type="hidden" name="people_count" id="people_count" value="1">
+          <input type="hidden" name="total_price" id="total_price" value="{{ tour.price }}">
+          <input type="hidden" name="date" id="selected-date">
+  
+          <!-- Botón de reserva -->
+          <a id="reserve-button" class="btn btn-primary w-100 py-2 fw-bold" href="#">Reserva</a>
+  
+          <!-- Detalles de precios -->
+          <hr>
+          <div class="d-flex justify-content-between fw-bold">
+              <span>Total a pagar</span>
+              <span id="total-price"> $ {{tour.price}} COP</span>
+          </div>
         </div>
     </div>
   </div>
+
+
+
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<style>
+  /* Resalta las fechas disponibles en azul */
+  .flatpickr-day.selected, .flatpickr-day.available-date {
+      background-color: #007bff !important; /* Azul */
+      color: white !important;
+  }
+</style>
+  
+<script>
+    // Obtener las fechas disponibles del contexto de Django
+    const availableDates = [
+        {% for date in tour.availableDate.all %}
+            "{{ date.date|date:'Y-m-d' }}",
+        {% endfor %}
+    ];
+  
+    // Inicializar Flatpickr con las fechas habilitadas
+    flatpickr("#available-date", {
+        dateFormat: "Y-m-d",
+        disable: [
+            function(date) {
+                return !availableDates.includes(flatpickr.formatDate(date, "Y-m-d"));
+            }
+        ],
+        onDayCreate: function(dObj, dStr, fp, dayElem) {
+            const dateStr = dayElem.dateObj.toISOString().slice(0, 10);
+            if (availableDates.includes(dateStr)) {
+                dayElem.classList.add("available-date");
+            }
+        },
+        onChange: function(selectedDates, dateStr, instance) {
+            document.getElementById("selected-date").value = dateStr;
+            updateReserveButtonURL();
+        }
+    });
+  
+    // Función para actualizar el número de personas y el precio total
+    function updateGuestCount(type, change) {
+        const input = document.getElementById(`${type}Count`);
+        let currentValue = parseInt(input.value);
+        currentValue += change;
+        if (currentValue < 1) currentValue = 1;
+        if (currentValue > 5) currentValue = 5;
+        input.value = currentValue;
+  
+        const pricePerPerson = parseFloat("{{ tour.price }}");
+        const totalPrice = pricePerPerson * currentValue;
+  
+        document.getElementById('total-price').textContent = `${totalPrice} COP`;
+        document.getElementById('total_price').value = totalPrice;
+        document.getElementById('people_count').value = currentValue;
+  
+        updateReserveButtonURL();
+    }
+  
+    // Función para actualizar la URL del botón con los parámetros de los valores dinámicos
+    function updateReserveButtonURL() {
+        const peopleCount = document.getElementById("people_count").value;
+        const totalPrice = document.getElementById("total_price").value;
+        const tourId = "{{ tour.id }}";
+        const selectedDate = document.getElementById("selected-date").value;
+  
+        const newUrl = "{% url 'Booking' tour.id %}?people_count=" + peopleCount + "&total_price=" + totalPrice + "&date=" + selectedDate;
+  
+        const reserveButton = document.getElementById("reserve-button");
+        reserveButton.setAttribute("href", newUrl);
+    }
+  
+    // Función para validar los campos antes de enviar
+    function validateForm() {
+        const selectedDate = document.getElementById("selected-date").value;
+        const peopleCount = document.getElementById("people_count").value;
+  
+        
+  
+        if (!peopleCount || peopleCount < 1) {
+            alert("Por favor, ingresa una cantidad válida de personas.");
+            return false;
+        }
+  
+        return true;
+    }
+  
+    // Esperar a que la página esté completamente cargada para inicializar el botón
+    document.addEventListener("DOMContentLoaded", function() {
+        updateReserveButtonURL();
+  
+        // Validar el formulario al hacer clic en el botón de reserva
+        const reserveButton = document.getElementById("reserve-button");
+        reserveButton.addEventListener("click", function(event) {
+            if (!validateForm()) {
+                event.preventDefault(); // Evitar el envío si la validación falla
+            }
+        });
+    });
+  </script>
+
+
+
 {% endblock %}

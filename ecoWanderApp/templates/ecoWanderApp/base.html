@@ -35,15 +35,25 @@
                 <a class="nav-link" > {{ user.first_name }} {{ user.last_name}}</a>
               </li>
 
+            
              <li class="nav-item">
-                <a class="nav-link" href="{% url 'log_out' %}">Cerrar Sesión</a>
-             </li>
+              <a class="nav-link" href="{% url 'ShowBooking' %}" >Reservas </a>
+            </li> 
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'log_out' %}">Cerrar Sesión</a>
+           </li>
 
               {% else %}
+
 
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'Tour' %}" >Tours </a>
               </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'ShowBooking' %}" >Reservas </a>
+              </li> 
 
             
               <li class="nav-item">
