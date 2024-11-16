@@ -1,0 +1,74 @@
+{% extends "ecoWanderApp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+ 
+<div class="container mt-5" style="margin-bottom: 20px;">
+    <div class="row">
+        <!-- Columna izquierda (Detalles del viaje) -->
+        <div class="col-md-8">
+            <h1>Confirmar Reserva</h1>
+            <div class="alert alert-success d-flex align-items-center">
+                <strong>¡Qué suerte! </strong> Aun hay cupos para realizar este Eco Tour.
+            </div>
+            <form method="POST" action="">
+                {% csrf_token %}
+
+                <h3>Detalles de reserva</h3>
+                <div>
+                    <p><strong>Fechas:</strong> {{ form.date.value }}</p>
+                    <input type="hidden" name="date" value="{{ form.date.value }}">
+                </div>
+                <div>
+                    <p><strong>Huéspedes:</strong> {{ form.people_count.value }} Personas</p>
+                    <input type="hidden" name="people_count" value="{{ form.people_count.value }}">
+                </div>
+
+                <div>
+                    <p><strong>Toal a pagar:</strong>$ {{ form.price_total.value }} COP </p>
+                    <input type="hidden" name="price_total" value="{{ form.price_total.value }}">
+                </div>
+
+                <div class="mb-3">
+                    <input type="hidden" name="status" value="{{ form.status.value }}">
+                </div>
+
+                <h3>Datos Personales</h3>
+                <div>
+                    <p><strong>Nombre:</strong> {{ user_profile.first_name }} {{ user_profile.last_name }}</p>
+                </div>
+                <div>
+                    <p><strong>Correo electrónico:</strong> {{ user_profile.email }}</p>
+                    <p><strong>Teléfono:</strong> {{ user_profile.phone }}</p>  
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Confirmar</button>
+            </form>
+        </div>
+
+        <!-- Columna derecha (Información del precio) -->
+        <div class="col-md-4">
+            <div class="card">
+                <img src="{{ tour.images.url }}" class="card-img-top" alt="Imagen del alojamiento">
+                <div class="card-body">
+                    <h5 class="card-title">{{ tour.name }}</h5>
+                    <p class="card-text">Ubicación: {{ tour.municipality }} </p>
+                    <p><strong>Información del precio</strong></p>
+                    <ul class="list-unstyled">
+                        <li><strong>Tarifa por persona:</strong> ${{ tour.price}} COP</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón de acción -->
+    <div class="mt-4">
+        
+    </div>
+</div>
+ 
+{% endblock %}
+
+

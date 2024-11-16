@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('ecoWanderApp.urls')),
     path('authentication/', include('authentication.urls')),
     path('tour/', include('tour.urls')),
+    path('booking/', include('booking.urls')),
 ]

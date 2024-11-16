@@ -1,8 +1,8 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
-from tour.forms import BusquedaTourForm
+from tour.forms import BusquedaTourForm, ReservationForm
 from .models import Tour
-
+ 
 
 # Create your views here.
 def tour(request):
@@ -31,5 +31,15 @@ def tour(request):
 
 def tour_detail(request, tour_id):
     tour = get_object_or_404(Tour, id=tour_id)
-    return render(request, 'tour/tourDetail.html', {'tour': tour})
+    if request.method == 'POST':
+        form = ReservationForm(request.POST, tour=tour)
+        if form.is_valid():
+            date = form.cleaned_data['date']
+            people = form.cleaned_data['people']
+            return redirect('reservation_confirmation', tour_id=tour.id, date_id=date.id, people=people)
+    else:
+        form = ReservationForm(tour=tour)
+
+    return render(request, 'tour/tourDetail.html', {'tour': tour, 'form': form})
+
 

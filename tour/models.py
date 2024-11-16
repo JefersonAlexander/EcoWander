@@ -44,7 +44,7 @@ class AvailableDate(models.Model):
     def __str__(self):
         return self.date.strftime('%Y-%m-%d')
 
-class Tour(models.Model):
+class Tour(models.Model): 
     name=models.CharField(max_length=50)
     description=models.TextField()
     municipality=models.ForeignKey(Municipality, on_delete=models.CASCADE)
@@ -62,3 +62,6 @@ class Tour(models.Model):
     
     def __str__(self):
         return self.name
+    
+    
+

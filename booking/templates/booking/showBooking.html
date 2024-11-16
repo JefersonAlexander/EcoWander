@@ -1,0 +1,29 @@
+{% extends "ecoWanderApp/base.html" %}
+
+{% load static %}
+
+{% block content %}
+ 
+    {% if reservations %}
+    <div class="reservations-container  mt-4" >
+        <h2>Tus Reservas</h2>
+        {% for reservation in reservations %}
+            <div class="card mb-3 border-primary" >
+                <div class="card-body">
+                    <h5 class="card-title text-primary">{{ reservation.tour.name }}</h5>
+                    <p><strong>Fecha de reserva</strong> {{ reservation.date }}</p>
+                    <p><strong>Número de personas:</strong> {{ reservation.people_count }}</p>
+                    <p><strong>Total pagado:</strong> $ {{ reservation.price_total }} COP</p>
+                    <p><strong>Estado de reserva:</strong> {{ reservation.status }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info mt-4">
+        <p>No tienes reservas actualmente.</p>
+    </div>
+{% endif %}
+
+    
+{% endblock %}
